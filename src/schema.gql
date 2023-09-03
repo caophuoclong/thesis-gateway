@@ -1,0 +1,12 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""User model"""
+type UserModel {
+  id: ID!
+}
+
+type Query {
+  getUser(id: String!): UserModel!
+}
