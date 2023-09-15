@@ -5,8 +5,78 @@
 """User model"""
 type UserModel {
   id: ID!
+
+  """Email of user"""
+  email: String!
+
+  """First name of user"""
+  first_name: String!
+
+  """Username of user"""
+  username: String!
+
+  """Password of user"""
+  password: String!
+
+  """Last name"""
+  last_name: String!
+
+  """Phone number"""
+  phone_number: String!
+
+  """Created At"""
+  createdAt: Float!
+
+  """Updated At"""
+  updatedAt: Float!
+
+  """DOB"""
+  dob: Float!
+
+  """Avatar"""
+  avatar: String!
+
+  """Cover"""
+  cover: String!
+
+  """Gender"""
+  gender: String!
+}
+
+"""Signup model"""
+type SignUpModel {
+  """Message while signup"""
+  message: String!
+}
+
+"""Object token"""
+type Token {
+  """Access token"""
+  token: String!
 }
 
 type Query {
-  getUser(id: String!): UserModel!
+  getMe: UserModel!
+  refreshToken: Token!
+}
+
+type Mutation {
+  signUp(email: String!, password: String!, first_name: String!, username: String!): SignUpModel!
+  signIn(loginUserInput: LoginUserInput!): LoginResponse!
+}
+
+union LoginResponse = Token | LoginFailed
+
+"""Login faild"""
+type LoginFailed {
+  """Message while signup"""
+  message: String!
+}
+
+input LoginUserInput {
+  """User name"""
+  username: String!
+
+  """Password"""
+  password: String!
 }

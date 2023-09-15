@@ -7,26 +7,30 @@ import { GraphQLError, buildSchema } from 'graphql';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
+import { AuthModule } from './auth/auth.module';
+import { ClientsModule } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { configuration } from './configs/configuration';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+            load: [configuration],
+        }),
         GraphQLModule.forRootAsync<ApolloDriverConfig>({
             driver: ApolloDriver,
-            useFactory: (userService: UserService) => {
+            useFactory: () => {
                 return {
                     autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-                    context: ({ req }) => {
-                        const headers = req.headers;
-                        const authorization = headers.authorization;
-                        if (authorization) {
-                        }
-                        throw new GraphQLError('Unauthorized');
-                    },
+                    context: ({ req, res }) => ({ req, res }),
                 };
             },
-            inject: [UserModule],
         }),
+
         UserModule,
+        AuthModule,
     ],
     controllers: [AppController],
     providers: [AppService],
